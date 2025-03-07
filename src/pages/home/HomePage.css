@@ -1,0 +1,300 @@
+/* HomePage.css - Styling for the HooshJoo home page */
+
+/* Main container styles */
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Hero section styles */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  max-width: 700px;
+}
+
+.hero-button {
+  padding: 12px 30px;
+  background-color: #FFF;
+  color: #764ba2;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.hero-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Features section styles */
+.features-section {
+  margin: 60px 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #333;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #764ba2;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.feature-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  color: #764ba2;
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.feature-description {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Popular courses section */
+.courses-section {
+  margin: 60px 0;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.course-card {
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.course-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.course-content {
+  padding: 20px;
+}
+
+.course-title {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.course-description {
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.course-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.course-rating {
+  display: flex;
+  align-items: center;
+  color: #f9a825;
+}
+
+.course-price {
+  font-weight: 700;
+  color: #764ba2;
+}
+
+/* Call to action section */
+.cta-section {
+  background-color: #f5f7ff;
+  padding: 60px 30px;
+  text-align: center;
+  border-radius: 10px;
+  margin: 60px 0;
+}
+
+.cta-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.cta-description {
+  max-width: 700px;
+  margin: 0 auto 30px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Testimonials section */
+.testimonials-section {
+  margin: 60px 0;
+}
+
+.testimonials-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 20px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.testimonial-card {
+  min-width: 300px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  scroll-snap-align: start;
+}
+
+.testimonial-text {
+  font-style: italic;
+  margin-bottom: 20px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.testimonial-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.testimonial-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.testimonial-role {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cta-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+  
+  .hero-section {
+    padding: 40px 15px;
+  }
+  
+  .feature-card, .course-card, .testimonial-card {
+    padding: 20px;
+  }
+}
+
