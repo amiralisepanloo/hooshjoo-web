@@ -1,0 +1,50 @@
+﻿rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Define some helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Public collections accessible by anyone
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isSignedIn() && request.resource.data.createdBy == request.auth.uid;
+      
+      // Course materials can be read by anyone, but only written by the course creator
+      match /lessons/{lessonId} {
+        allow read: if true;
+        allow write: if isSignedIn() && 
+                      get(/databases/$(database)/documents/courses/$(courseId)).data.createdBy == request.auth.uid;
+      }
+    }
+    
+    // User-specific data - only accessible by the user
+    match /users/{userId} {
+      allow read: if isSignedIn() && isOwner(userId);
+      allow write: if isSignedIn() && isOwner(userId);
+      
+      // User progress should only be accessible by the user
+      match /progress/{courseId} {
+        allow read, write: if isSignedIn() && isOwner(userId);
+      }
+    }
+    
+    // User submissions for assignments/quizzes
+    match /submissions/{submissionId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false; // Immutable once submitted
+    }
+    
+    // Admin access - should be restricted to admin roles (would normally use custom claims)
+    match /admin/{document=**} {
+      allow read, write: if isSignedIn() && 
+                         exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+  }
+}

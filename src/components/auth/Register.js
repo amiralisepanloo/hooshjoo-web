@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Button, Typography, Container, Box, Alert, Paper, Checkbox, FormControlLabel } from '@mui/material';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register, updateUserProfile } = useAuth();
+  const { register, updateUserProfile } = useAuthContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

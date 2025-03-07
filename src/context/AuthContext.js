@@ -1,120 +1,96 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  auth,
+import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  getAuth,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
-  onAuthStateChanged,
-  updateProfile,
-  getCurrentUser
-} from '../firebase';
+  updateProfile
+} from "firebase/auth";
+import { auth } from "../firebase";
 
-// Create the Auth Context
+// 1️⃣ ایجاد کانتکست
 const AuthContext = createContext();
 
-// Hook to use the Auth Context
-export function useAuth() {
+// 2️⃣ Hook برای دسترسی آسان به مقدار کانتکست
+export function useAuthContext() {
   return useContext(AuthContext);
 }
 
-// Provider component that wraps your app and makes auth object available to any child component that calls useAuth().
-export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+// 3️⃣ ایجاد Provider برای مدیریت وضعیت احراز هویت
+export function AuthContextProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [authIsReady, setAuthIsReady] = useState(false);
+  const [error, setError] = useState("");
 
-  // Sign up function
-  async function register(email, password, displayName) {
-    try {
-      setError('');
-      const userCredential = await createUserWithEmailAndPassword(email, password);
-      await updateProfile(userCredential.user, { displayName });
-      return userCredential.user;
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    }
-  }
-
-  // Login function
-  async function login(email, password) {
-    try {
-      setError('');
-      const userCredential = await signInWithEmailAndPassword(email, password);
-      return userCredential.user;
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    }
-  }
-
-  // Logout function
-  async function logout() {
-    try {
-      setError('');
-      await signOut();
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    }
-  }
-
-  // Password reset function
-  async function resetPassword(email) {
-    try {
-      setError('');
-      await sendPasswordResetEmail(email);
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    }
-  }
-
-  // Update user profile
-  async function updateUserProfile(profileData) {
-    try {
-      setError('');
-      const user = auth.currentUser;
-      if (user) {
-        await updateProfile(user, profileData);
-        setCurrentUser({ ...currentUser, ...profileData });
-      } else {
-        throw new Error("No user is signed in");
-      }
-    } catch (error) {
-      setError(error.message);
-      throw error;
-    }
-  }
-
-  // Subscribe to auth state changes
+  // 4️⃣ بررسی تغییرات وضعیت کاربر هنگام لاگین یا خروج
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged((user) => {
-      setCurrentUser(user);
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setAuthIsReady(true);
     });
 
-    // Cleanup subscription on unmount
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
-  // The value object that will be passed to any component using this context
+  // 5️⃣ توابع ورود، ثبت‌نام و خروج
+  async function register(email, password, displayName) {
+    try {
+      setError("");
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName });
+      setUser(userCredential.user);
+      return userCredential.user;
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    }
+  }
+
+  async function login(email, password) {
+    try {
+      setError("");
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setUser(userCredential.user);
+      return userCredential.user;
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    }
+  }
+
+  async function logout() {
+    try {
+      setError("");
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    }
+  }
+
+  async function resetPassword(email) {
+    try {
+      setError("");
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    }
+  }
+
+  // 6️⃣ مقداردهی به `AuthContext`
   const value = {
-    currentUser,
-    loading,
+    user,
+    authIsReady,  // ✅ مقدار `authIsReady` را اینجا اضافه کردیم
     error,
     register,
     login,
     logout,
-    resetPassword,
-    updateUserProfile
+    resetPassword
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
